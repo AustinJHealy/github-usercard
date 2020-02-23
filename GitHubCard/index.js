@@ -3,12 +3,82 @@
            https://api.github.com/users/<your name>
 */
 
+
+function gitHubComponent (gitData) {
+  
+  const cardContainerDiv = document.createElement("div");
+  cardContainerDiv.classList.add('card');
+
+  const avatarImg = document.createElement('img');
+  avatarImg.src= gitData.data.avatar_url;
+  cardContainerDiv.appendChild(avatarImg);
+      
+  const cardInfoDiv = document.createElement('div');
+  cardInfoDiv.classList.add('card-info');
+
+  cardContainerDiv.appendChild(cardInfoDiv);
+
+  const name = document.createElement('h3');
+  name.classList.add('name');
+  name.textContent = gitData.data.name;
+      
+  const username = document.createElement('p');
+  username.classList.add('username');
+  username.textContent = gitData.data.login;
+
+  const location = document.createElement('p');
+  location.textContent = "Location: " + gitData.data.location;
+
+  const profileURLContainer = document.createElement('p');
+  profileURLContainer.textContent = "Profile: ";
+      
+  const profileURLAnchor = document.createElement('a');
+  profileURLAnchor.href= gitData.data.html_url;
+  profileURLAnchor.textContent = gitData.data.html_url;
+      
+  const followers = document.createElement('p');
+  followers.textContent = "Followers: " + gitData.data.followers;
+
+  const following = document.createElement('p');
+  following.textContent = "Following: " + gitData.data.following;
+      
+  const bio = document.createElement('bio');
+  bio.textContent = gitData.data.bio;
+  
+  cardInfoDiv.appendChild(name);
+  cardInfoDiv.appendChild(username);
+  cardInfoDiv.appendChild(location);
+  cardInfoDiv.appendChild(profileURLContainer);
+  profileURLContainer.appendChild(profileURLAnchor);
+  cardInfoDiv.appendChild(followers);
+  cardInfoDiv.appendChild(following);
+  cardInfoDiv.appendChild(bio);
+  
+      
+    
+  return cardContainerDiv;
+};
+
+axios.get(`https://api.github.com/users/austinjhealy`)
+  .then(response => {
+    
+    const cardsDiv = document.querySelector('.cards');
+   
+    cardsDiv.appendChild(gitHubComponent(response));
+   
+  })
+  .catch(err => {
+    return "There was an error";
+  });
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
 
    Skip to Step 3.
 */
+
+
 
 /* Step 4: Pass the data received from Github into your function, 
            create a new component and add it to the DOM as a child of .cards
@@ -24,7 +94,22 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ["makeTaller", "wmwebb-cf", "weinerjm14", "sarahmlawrence", "dstiles2"];
+
+
+const url = `https://api.github.com/users/`;
+
+followersArray.forEach((item) => {
+   axios.get(url+item)
+    .then (response => {
+      cardsDiv = document.querySelector('.cards');
+      cardsDiv.appendChild(gitHubComponent(response));
+    })
+   
+    .catch(err => {
+    return "There was an error";
+  });
+});
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +130,9 @@ const followersArray = [];
 </div>
 
 */
+
+
+
 
 /* List of LS Instructors Github username's: 
   tetondan
